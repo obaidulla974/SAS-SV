@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Addiction Test (SAS-SV)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .description {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .gender-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .gender-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        
+        .gender-options {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .gender-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .gender-option input {
+            display: none;
+        }
+        
+        .gender-option label {
+            display: block;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gender-option input:checked + label {
+            border-color: #3498db;
+            background: #e8f4fc;
+            color: #3498db;
+        }
+        
+        .questions-container {
+            margin-top: 20px;
+        }
+        
+        .question-card {
+            background: white;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .likert-scale {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .likert-option {
+            text-align: center;
+        }
+        
+        .likert-option input {
+            display: none;
+        }
+        
+        .likert-option label {
+            display: block;
+            padding: 10px 5px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .likert-option input:checked + label {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #7f8c8d;
+            padding: 0 5px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #calculateBtn {
+            background: #3498db;
+            color: white;
+            flex: 2;
+        }
+        
+        #resetBtn {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            flex: 1;
+        }
+        
+        #calculateBtn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        #resetBtn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .results-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            border-top: 6px solid #3498db;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .results-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .score-display {
+            font-size: 72px;
+            font-weight: 800;
+            color: #3498db;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-display {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 20px;
+            margin: 15px 0;
+        }
+        
+        .normal {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .addicted {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .interpretation {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            font-size: 16px;
+            line-height: 1.7;
+            border-left: 4px solid #f1c40f;
+        }
+        
+        .gender-warning {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .footnote {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-top: 30px;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .likert-scale {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+            
+            .scale-labels {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .score-display {
+                font-size: 60px;
+            }
+            
+            .gender-options {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .likert-scale {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .question-text {
+                font-size: 15px;
+            }
+            
+            .score-display {
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smartphone Addiction Test (SAS-SV)</h1>
+            <p class="description">This validated test helps you assess your risk of smartphone addiction. Answer all 10 questions honestly for accurate results.</p>
+        </header>
+        
+        <div class="gender-selector">
+            <div class="gender-title">Select your gender (for accurate scoring)</div>
+            <div class="gender-options">
+                <div class="gender-option">
+                    <input type="radio" id="male" name="gender" value="male">
+                    <label for="male">Male</label>
+                </div>
+                <div class="gender-option">
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+                </div>
+            </div>
+            <div id="genderWarning" class="gender-warning">Please select your gender before taking the test.</div>
+        </div>
+        
+        <div class="questions-container" id="questionsContainer">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="buttons">
+            <button id="calculateBtn">Calculate Score</button>
+            <button id="resetBtn">Reset Test</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <div class="results-card">
+                <div class="results-title">Your SAS-SV Test Results</div>
+                <div class="score-display" id="totalScore">0</div>
+                <div>Total Score (Max: 60)</div>
+                
+                <div id="categoryDisplay" class="category-display">Normal</div>
+                <div id="categoryDescription">Based on your gender and score</div>
+                
+                <div class="interpretation" id="interpretation">
+                    Your results will appear here after calculation.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footnote">
+            <p>Note: The SAS-SV (Smartphone Addiction Scale–Short Version) is a validated psychological tool. This test provides indicative results only and is not a substitute for professional diagnosis.</p>
+            <p>Cutoff scores: Male ≥ 31 = High risk, Female ≥ 33 = High risk</p>
+        </div>
+    </div>
+
+    <script>
+        // SAS-SV Questions
+        const questions = [
+            "Missing planned work due to smartphone use.",
+            "Having a hard time concentrating in class, while doing assignments, or while working due to smartphone use.",
+            "Feeling pain in wrists or at the back of the neck while using a smartphone.",
+            "Won't be able to stand not having a smartphone.",
+            "Feeling impatient and fretful when not holding a smartphone.",
+            "Having my smartphone in my mind even when not using it.",
+            "I will never give up using my smartphone even when my daily life is already greatly affected by it.",
+            "Constantly checking my smartphone so as not to miss conversations between other people on Twitter or Facebook.",
+            "Using my smartphone longer than I intended.",
+            "The people around me complain that I use my smartphone too much."
+        ];
+        
+        // Initialize the test
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionsContainer = document.getElementById('questionsContainer');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const genderWarning = document.getElementById('genderWarning');
+            
+            // Generate question cards
+            questions.forEach((question, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.innerHTML = `
+                    <div>
+                        <span class="question-number">${index + 1}</span>
+                        <span class="question-text">${question}</span>
+                    </div>
+                    <div class="likert-scale">
+                        ${[1, 2, 3, 4, 5, 6].map(num => `
+                            <div class="likert-option">
+                                <input type="radio" id="q${index + 1}_${num}" name="q${index + 1}" value="${num}">
+                                <label for="q${index + 1}_${num}">${num}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="scale-labels">
+                        <span>Strongly Disagree</span>
+                        <span>Strongly Agree</span>
+                    </div>
+                `;
+                questionsContainer.appendChild(questionCard);
+            });
+            
+            // Calculate score when button is clicked
+            calculateBtn.addEventListener('click', function() {
+                // Check if gender is selected
+                const gender = document.querySelector('input[name="gender"]:checked');
+                if (!gender) {
+                    genderWarning.style.display = 'block';
+                    return;
+                }
+                
+                genderWarning.style.display = 'none';
+                
+                // Calculate total score
+                let totalScore = 0;
+                let allAnswered = true;
+                
+                for (let i = 1; i <= 10; i++) {
+                    const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                    if (selectedOption) {
+                        totalScore += parseInt(selectedOption.value);
+                    } else {
+                        allAnswered = false;
+                        break;
+                    }
+                }
+                
+                if (!allAnswered) {
+                    alert('Please answer all 10 questions before calculating your score.');
+                    return;
+                }
+                
+                // Determine category based on gender and score
+                const isMale = gender.value === 'male';
+                const cutoff = isMale ? 31 : 33;
+                const isAddicted = totalScore >= cutoff;
+                
+                // Display results
+                document.getElementById('totalScore').textContent = totalScore;
+                
+                const categoryDisplay = document.getElementById('categoryDisplay');
+                const categoryDescription = document.getElementById('categoryDescription');
+                const interpretation = document.getElementById('interpretation');
+                
+                if (isAddicted) {
+                    categoryDisplay.textContent = 'High Risk of Addiction';
+                    categoryDisplay.className = 'category-display addicted';
+                    categoryDescription.textContent = `Based on ${isMale ? 'male' : 'female'} cutoff score of ${cutoff}+`;
+                    
+                    interpretation.innerHTML = `
+                        <strong>Interpretation:</strong> Your score suggests a high risk of smartphone addiction. 
+                        You may be experiencing significant negative impacts on your daily life, productivity, and well-being due to excessive smartphone use.<br><br>
+                        <strong>Recommendations:</strong> Consider setting daily usage limits, turning off non-essential notifications, designating smartphone-free times/areas, and seeking professional advice if your usage is causing significant distress or impairment.
+                    `;
+                } else {
+                    categoryDisplay.textContent = 'Normal Range';
+                    categoryDisplay.className = 'category-display normal';
+                    categoryDescription.textContent = `Based on ${isMale ? 'male' : 'female'} cutoff score of ${cutoff}+`;
+                    
+                    interpretation.innerHTML = `
+                        <strong>Interpretation:</strong> Your score falls within the normal range. 
+                        While you may use your smartphone regularly, it doesn't appear to be significantly interfering with your daily life or well-being.<br><br>
+                        <strong>Recommendations:</strong> Continue to maintain a healthy balance. Be mindful of any increases in usage that might affect your productivity, sleep, or relationships. Periodic self-checks can help maintain healthy digital habits.
+                    `;
+                }
+                
+                // Show results with animation
+                resultsContainer.style.display = 'block';
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            
+            // Reset the test
+            resetBtn.addEventListener('click', function() {
+                // Clear all radio buttons
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // Clear gender selection
+                document.querySelectorAll('input[name="gender"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // Hide results
+                resultsContainer.style.display = 'none';
+                
+                // Hide gender warning
+                genderWarning.style.display = 'none';
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Add hover effect to likert options
+            document.addEventListener('mouseover', function(e) {
+                if (e.target.classList.contains('likert-option') || e.target.tagName === 'LABEL') {
+                    const label = e.target.tagName === 'LABEL' ? e.target : e.target.querySelector('label');
+                    if (label && !label.previousElementSibling.checked) {
+                        label.style.transform = 'translateY(-2px)';
+                        label.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                    }
+                }
+            });
+            
+            document.addEventListener('mouseout', function(e) {
+                if (e.target.classList.contains('likert-option') || e.target.tagName === 'LABEL') {
+                    const label = e.target.tagName === 'LABEL' ? e.target : e.target.querySelector('label');
+                    if (label && !label.previousElementSibling.checked) {
+                        label.style.transform = 'translateY(0)';
+                        label.style.boxShadow = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
